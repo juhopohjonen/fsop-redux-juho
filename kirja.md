@@ -3,3 +3,5 @@
 21.5 tehty tehtävät tehtäviin 6.2 asti
 
 22.5 aloitettu tehtävät 6.3 --> ...
+
+25.5 saatu tehtävät valmiiksi --> 6.13
