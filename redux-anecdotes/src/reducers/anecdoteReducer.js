@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, current } from "@reduxjs/toolkit"
+import anecdoteService from "../services/anecdoteService"
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -11,7 +12,7 @@ const anecdotesAtStart = [
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
+export const asObject = (anecdote) => {
   return {
     content: anecdote,
     id: getId(),
@@ -19,7 +20,8 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+//const initialState = anecdotesAtStart.map(asObject)
+const initialState = []
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
@@ -32,6 +34,12 @@ const anecdoteSlice = createSlice({
     newAnecdote(state, action) {
       const anecdote = asObject(action.payload.content)
       state.push(anecdote)
+    },
+    setAnecdotes(state, action) {
+      return action.payload
+    },
+    createByObject(state, action) {
+      state.push(action.payload)
     }
   }
 })
@@ -45,14 +53,29 @@ export const createVote = (id) => {
   }
 }
 
-export const createNewAnecdote = (content) => {
-  return {
-    type: 'anecdotes/newAnecdote',
-    payload: {
-      content
-    }
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAnecdotes()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+
+export const createNewAnecdote = (anecdoteObject) => {
+  return async dispatch => {
+    await anecdoteService.postAnecdote(anecdoteObject)
+    dispatch(createByObject(anecdoteObject))
+  }
+}
+
+export const voteAnecdote = (anecdote) => {
+
+  const votesBefore = anecdote.votes
+
+  return async dispatch => {
+    await anecdoteService.voteAnecdote(anecdote.id, anecdote, votesBefore + 1)
+    dispatch(vote({ id: anecdote.id }))
   }
 }
 
 export default anecdoteSlice.reducer
-export const { newAnecdote, vote } = anecdoteSlice.actions
+export const { newAnecdote, vote, setAnecdotes, createByObject } = anecdoteSlice.actions

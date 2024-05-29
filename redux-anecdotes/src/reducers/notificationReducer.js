@@ -20,4 +20,22 @@ export const notificationCreator = (newNotification) => {
     }
 }
 
+export const setNotification = (notification, displayTime) => {
+
+    return async dispatch => {
+        dispatch(changeNotification(notification))
+        const displayTimeInMilliSeconds = displayTime * 1000
+
+        console.log('setting notif...')
+    
+        setTimeout(() => {
+            console.log('unsetting')
+            dispatch(changeNotification(''))
+        }, displayTimeInMilliSeconds)
+    }
+    
+
+}
+
+export const { changeNotification } = notificationSlice.actions
 export default notificationSlice.reducer

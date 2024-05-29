@@ -5,3 +5,5 @@
 22.5 aloitettu tehtävät 6.3 --> ...
 
 25.5 saatu tehtävät valmiiksi --> 6.13
+
+29.5 tehty tehtävät -> 6.24
